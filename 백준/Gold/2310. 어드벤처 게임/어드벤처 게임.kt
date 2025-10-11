@@ -36,18 +36,10 @@ private class P2310 {
         val cash: Int
     )
 
-    private val WS = Regex("\\s+")
-
     var n = 0
     var rooms: List<Room> = emptyList()
     var cache: IntArray = intArrayOf()
-    val tok: Iterator<String> = System.`in`.bufferedReader()
-        .lineSequence()
-        .flatMap { line ->
-            if (line.isBlank()) emptySequence()
-            else line.trim().splitToSequence(WS)
-        }
-        .iterator()
+    val bufferedReader = System.`in`.bufferedReader()
     val outputBuilder = StringBuilder()
 
     fun loop() {
@@ -57,7 +49,7 @@ private class P2310 {
     }
 
     fun readInput(): Boolean {
-        n = tok.next().toInt()
+        n = bufferedReader.readLine().toInt()
         if (n == 0) {
             return false
         }
@@ -65,20 +57,13 @@ private class P2310 {
         rooms = ArrayList(n+1)
         rooms += Room.DUMMY_ROOM
         repeat(n) {
-            val type = tok.next().first()
-            val money = tok.next().toInt()
-            val nextRoomIndices: ArrayList<Int> = arrayListOf()
-            while (true) {
-                val roomIdx = tok.next().toInt()
-                if (roomIdx == 0) break
-                nextRoomIndices.add(roomIdx)
+            bufferedReader.readLine().split(" ").let { tokens ->
+                rooms += Room(
+                    type = tokens[0].first(),
+                    money = tokens[1].toInt(),
+                    nextRoomIndices = tokens.subList(2, tokens.lastIndex).map(String::toInt).toIntArray()
+                )
             }
-
-            rooms += Room(
-                type = type,
-                money = money,
-                nextRoomIndices = nextRoomIndices.toIntArray()
-            )
         }
         return true
     }
