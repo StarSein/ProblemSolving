@@ -13,9 +13,10 @@ class P5214 {
 
         // 풀이
         val dq = ArrayDeque<Int>()
-        val visited = BooleanArray(n + 1)
+        val isNodeVisited = BooleanArray(n + 1)
+        val isTubeVisited = BooleanArray(m)
         dq.addLast(1)
-        visited[1] = true
+        isNodeVisited[1] = true
         var dist = 0
         while (dq.isNotEmpty()) {
             dist++
@@ -26,10 +27,13 @@ class P5214 {
                     return
                 }
                 for (i in nodes[cur]) {
+                    if (isTubeVisited[i]) continue
+                    isTubeVisited[i] = true
+
                     for (next in tubes[i]) {
-                        if (visited[next]) continue
+                        if (isNodeVisited[next]) continue
                         dq.addLast(next)
-                        visited[next] = true
+                        isNodeVisited[next] = true
                     }
                 }
             }
